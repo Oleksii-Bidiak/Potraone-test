@@ -1,0 +1,14 @@
+{
+  "name": "digit-puzzle-solver",
+  "version": "1.0.0",
+  "description": "Node.js утиліта для пошуку найдовшого ланцюга чисел за певним правилом.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "keywords": ["digit", "puzzle", "graph", "algorithm"],
+  "author": "Oleksii Bidiak",
+  "license": "MIT"
+}

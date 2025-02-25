@@ -1,8 +1,9 @@
 const fs = require('fs');
+const { readFileSync } = fs;
 
 function readNumbersFromFile(filename) {
   try {
-    const data = fs.readFileSync(filename, 'utf8');
+    const data = readFileSync(filename, 'utf8');
     return [
       ...new Set(
         data
@@ -21,7 +22,6 @@ class DigitPuzzleSolver {
   constructor(numbers) {
     this.numbers = numbers;
     this.graph = new Map();
-    this.memo = new Map();
     this.buildGraph();
   }
 
@@ -31,9 +31,9 @@ class DigitPuzzleSolver {
       for (let other of this.numbers) {
         if (num !== other && other.startsWith(lastTwo)) {
           if (!this.graph.has(num)) {
-            this.graph.set(num, []);
+            this.graph.set(num, new Set());
           }
-          this.graph.get(num).push(other);
+          this.graph.get(num).add(other);
         }
       }
     }
@@ -41,7 +41,6 @@ class DigitPuzzleSolver {
 
   dfs(current, visited = new Set()) {
     if (visited.has(current)) return '';
-    if (this.memo.has(current)) return this.memo.get(current);
 
     visited.add(current);
     let longestPath = current;
@@ -56,15 +55,14 @@ class DigitPuzzleSolver {
       }
     }
 
-    this.memo.set(current, longestPath);
     return longestPath;
   }
 
   findLongestChain() {
-    // console.log('graph', this.graph);
     let longestSequence = '';
     for (let num of this.numbers) {
       let sequence = this.dfs(num);
+
       if (sequence.length > longestSequence.length) {
         longestSequence = sequence;
       }
@@ -75,10 +73,8 @@ class DigitPuzzleSolver {
 
 const filename = 'file.txt';
 const numbers = readNumbersFromFile(filename);
-// const numbers = ['248460', '962282', '608017', '994725', '177092'];
 const solver = new DigitPuzzleSolver(numbers);
 
-console.time('Execution Time');
-const result = solver.findLongestChain();
-console.log('Найдовша послідовність:', result);
-console.timeEnd('Execution Time');
+console.time('Time');
+console.log('Output:', solver.findLongestChain());
+console.timeEnd('Time');
